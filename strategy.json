@@ -1,0 +1,36 @@
+{
+  "pairs": [
+    {
+      "symbol": "TON/USDT"
+    }
+  ],
+  "indicators": [
+    {
+      "name": "ema",
+      "timeframe": "15min",
+      "parameters": {
+        "length": 100,
+        "offset": 0
+      }
+    },
+    {
+      "name": "bbands",
+      "timeframe": "5min",
+      "parameters": {
+        "length": 130,
+        "ma_type": "ema",
+        "std_dev": 1.2
+      }
+    },
+    {
+      "name": "candlesticks",
+      "timeframe": "1min"
+    }
+  ],
+  "long": {
+     "conditions": {
+       "entry": "candlesticks.open < bbands.upper and candlesticks.close > bbands.upper and bbands.middle > ema",
+       "exit": "candlesticks.high >= entry_price + entry_price * 0.01 + (3 -1)"
+     }
+  }
+}

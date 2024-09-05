@@ -1,0 +1,22 @@
+exclude = [
+    ".venv",
+    ".vscode",
+]
+
+target-version = "py311"
+line-length = 80
+select = ["F", "I", "TYP", "ANN"]
+ignore = ["ANN101"]
+extend-select = [
+    "ANN001",  # Missing type annotation for function argument
+    "ANN401",  # Any type shouldn't be used
+    "ANN002",  # Missing type annotation for function return
+    "ANN003",  # Missing type annotation for class attribute
+    "TYP001",  # Missing or improper use of type hinting annotations
+]
+
+[format]
+quote-style = "single"
+
+[lint.isort]
+classes = ["SVC"]
