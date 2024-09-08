@@ -2,6 +2,7 @@ import sqlite3
 from typing import List
 
 conn = sqlite3.connect('signals.sqlite3')
+conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
 
 
@@ -26,6 +27,15 @@ def fetch_candlesticks(symbol: str) -> List[dict]:
     cursor.execute(query, (symbol,))
 
     return cursor.fetchall()
+
+
+def fetch_last_candlestick(symbol: str) -> dict | None:
+    query = 'SELECT opened_at, open, high, low, close, volume FROM candlesticks WHERE symbol = ? ORDER BY opened_at DESC LIMIT 1'
+    cursor.execute(query, (symbol,))
+
+    last_row = cursor.fetchone()
+
+    return dict(last_row) if last_row is not None else None
 
 
 def insert_candlesticks(symbol: str, candlesticks: List[dict] | dict) -> None:

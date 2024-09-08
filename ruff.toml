@@ -12,7 +12,7 @@ extend-select = [
     "ANN401",  # Any type shouldn't be used
     "ANN002",  # Missing type annotation for function return
     "ANN003",  # Missing type annotation for class attribute
-    "TYP001",  # Missing or improper use of type hinting annotations
+    "TCH001",  # Missing or improper use of type hinting annotations
 ]
 
 [format]

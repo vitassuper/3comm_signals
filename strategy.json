@@ -1,7 +1,7 @@
 {
   "pairs": [
     {
-      "symbol": "TON/USDT"
+      "symbol": "ADA/USDT"
     }
   ],
   "indicators": [
@@ -30,7 +30,7 @@
   "long": {
      "conditions": {
        "entry": "candlesticks.open < bbands.upper and candlesticks.close > bbands.upper and bbands.middle > ema",
-       "exit": "candlesticks.high >= entry_price + entry_price * 0.01 + (3 -1)"
+       "exit": "candlesticks.high >= entry_price + entry_price * 0.01"
      }
   }
 }

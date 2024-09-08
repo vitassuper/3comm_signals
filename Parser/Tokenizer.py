@@ -17,12 +17,12 @@ class Tokenizer:
 
     def tokenize(self) -> List[Token]:
         token_specification = [
+            (TokenType.OPERATOR, r'\b(or|and)\b|[<>!=]=?|[+\-*/]'),
             (TokenType.NUMBER, r'\d+(\.\d*)?'),
             (
                 TokenType.IDENTIFIER,
                 r'[a-zA-Z_][a-zA-Z_0-9]*(\.[a-zA-Z_][a-zA-Z_0-9]*)?',
             ),
-            (TokenType.OPERATOR, r'\b(or|and)\b|[<>!=]=?|[+\-*/]'),
             (TokenType.LPAREN, r'\('),
             (TokenType.RPAREN, r'\)'),
             (TokenType.WHITESPACE, r'[ \t]+'),

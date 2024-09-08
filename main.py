@@ -3,9 +3,11 @@ import json
 import ccxt
 from pandas import set_option
 
+from Backtest.Backtest import Backtest
 from Parser.Parser import Parser
 from Parser.Tokenizer import Tokenizer
 from Parser.visualize_ast import visualize_ast
+from Strategy.Strategy import Strategy
 
 
 def get_binance_exchange():
@@ -17,20 +19,20 @@ def main() -> None:
     set_option('display.precision', 8)
 
     with open('strategy.json', 'r') as file:
-        # strategy = Strategy.from_dict(json.load(file))
-        # Backtest(strategy, get_binance_exchange()).run()
+        strategy = Strategy.from_dict(json.load(file))
+        Backtest(strategy, get_binance_exchange()).run()
 
-        content = json.load(file)
-        tokens = Tokenizer(content['long']['conditions']['exit2']).tokenize()
-        ast = Parser(tokens).parse()
+        # content = json.load(file)
+        # tokens = Tokenizer(content['long']['conditions']['entry']).tokenize()
+        # ast = Parser(tokens).parse()
 
-        visualize_ast(ast)
-
-        entry_price = 20
-
-        print(entry_price + entry_price * 0.01 - (4 * 6) + 8)
-
-        print(ast.evaluate({'entry_price': 20}))
+        # visualize_ast(ast)
+        #
+        # entry_price = 20
+        #
+        # print(entry_price + entry_price * 0.01 - (4 * 6) + 8)
+        #
+        # print(ast.evaluate({'entry_price': 20}))
 
 
 if __name__ == '__main__':
