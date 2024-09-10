@@ -27,3 +27,8 @@ def get_start_of_minute_one_minute_ago() -> int:
     start_of_one_minute_ago = start_of_current_minute - timedelta(minutes=1)
 
     return int(start_of_one_minute_ago.timestamp() * 1000)
+
+
+def is_list_of_lists(candles: List[any]) -> bool:
+    # Check if all elements in the list are also lists
+    return all(isinstance(item, list) for item in candles)

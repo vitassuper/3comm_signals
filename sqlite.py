@@ -1,6 +1,8 @@
 import sqlite3
 from typing import Any, List, Tuple
 
+from helpers import is_list_of_lists
+
 conn = sqlite3.connect('signals.sqlite3')
 conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
@@ -83,8 +85,8 @@ def fetch_first_and_last_candles(
     return candles
 
 
-def insert_candles(symbol: str, candles: List[dict] | dict) -> None:
-    if isinstance(candles, dict):
+def insert_candles(symbol: str, candles: List[List[Any]] | List[Any]) -> None:
+    if not is_list_of_lists(candles):
         candles = [candles]
 
     for candle in candles:

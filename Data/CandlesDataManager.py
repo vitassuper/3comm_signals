@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from ccxt import Exchange
+from pandas import Timedelta
 
 from Data.Candles import Candles
 from Data.CandlesDataProvider import CandlesDataProvider
@@ -17,7 +18,8 @@ class CandlesDataManager:
     def __init__(self, exchange: Exchange) -> None:
         self.data_provider = CandlesDataProvider(exchange)
 
-    def _convert_to_candles_dataframe(self, candles: List[dict]) -> Candles:
+    @staticmethod
+    def _convert_to_candles_dataframe(candles: List[dict]) -> Candles:
         return Candles(
             candles,
             columns=['time', 'open', 'high', 'low', 'close', 'volume'],
@@ -66,4 +68,23 @@ class CandlesDataManager:
             symbol, start_timestamp, limit
         )
 
-        return self._convert_to_candles_dataframe(candles)
+        return CandlesDataManager._convert_to_candles_dataframe(candles)
+
+    @staticmethod
+    def validate_data_completeness(candles: Candles) -> None:
+        expected_interval = Timedelta(
+            minutes=-1
+        )  # Adjust as per your candles frequency
+
+        # Iterate through the DataFrame and check for missing candles
+        for i in range(1, len(candles)):
+            current_candle_time = candles.index[i]
+            previous_candle_time = candles.index[i - 1]
+
+            # Calculate the difference between the current and previous timestamps
+
+            if current_candle_time - previous_candle_time != expected_interval:
+                # TODO: temp solution
+                print(
+                    f'Missing candle between {previous_candle_time} and {current_candle_time}.'
+                )

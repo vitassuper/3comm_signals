@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Tuple
 
 from Parser.IdentifierToken import IdentifierToken
 from Parser.NumberToken import NumberToken
@@ -15,8 +15,9 @@ class Tokenizer:
     def __init__(self, rule: str) -> None:
         self.rule: str = rule
 
-    def tokenize(self) -> List[Token]:
-        token_specification = [
+    @staticmethod
+    def _get_token_specification() -> List[Tuple[TokenType, str]]:
+        return [
             (TokenType.OPERATOR, r'\b(or|and)\b|[<>!=]=?|[+\-*/]'),
             (TokenType.NUMBER, r'\d+(\.\d*)?'),
             (
@@ -28,39 +29,26 @@ class Tokenizer:
             (TokenType.WHITESPACE, r'[ \t]+'),
             (TokenType.ERROR, r'.'),
         ]
-        regex_parts = '|'.join(
-            f'(?P<{pair[0].value}>{pair[1]})' for pair in token_specification
-        )
-        tokens = []
-        for match in re.finditer(regex_parts, self.rule):
-            type_ = match.lastgroup
-            value = match.group(type_)
 
-            if type_ == TokenType.WHITESPACE.value:
-                continue
+    @staticmethod
+    def _get_token_mapping():
+        return {
+            TokenType.NUMBER.value: lambda val: NumberToken(
+                TokenType.NUMBER, float(val)
+            ),
+            TokenType.IDENTIFIER.value: lambda val: IdentifierToken(
+                TokenType.IDENTIFIER, val
+            ),
+            TokenType.OPERATOR.value: lambda val: OperatorToken(
+                TokenType.OPERATOR, Tokenizer.get_operator_token_value(val)
+            ),
+            TokenType.LPAREN.value: lambda _: Token(TokenType.LPAREN),
+            TokenType.RPAREN.value: lambda _: Token(TokenType.RPAREN),
+        }
 
-            if type_ == TokenType.ERROR.value:
-                raise RuntimeError(f'Unexpected character {value}')
-
-            if type_ == TokenType.NUMBER.value:
-                tokens.append(NumberToken(TokenType.NUMBER, float(value)))
-            elif type_ == TokenType.IDENTIFIER.value:
-                tokens.append(IdentifierToken(TokenType.IDENTIFIER, value))
-            elif type_ == TokenType.OPERATOR.value:
-                tokens.append(
-                    OperatorToken(
-                        TokenType.OPERATOR, self.get_operator_token_value(value)
-                    )
-                )
-            elif type_ == TokenType.LPAREN.value:
-                tokens.append(Token(TokenType.LPAREN))
-            elif type_ == TokenType.RPAREN.value:
-                tokens.append(Token(TokenType.RPAREN))
-
-        return tokens
-
+    @staticmethod
     def get_operator_token_value(
-        self, operator: str
+        operator: str,
     ) -> LogicalOpType | ArithmeticOpType | ComparisonOpType:
         if operator in LogicalOpType:
             return LogicalOpType(operator)
@@ -72,3 +60,28 @@ class Tokenizer:
             return ComparisonOpType(operator)
 
         raise RuntimeError(f'Unexpected operator {operator}')
+
+    def tokenize(self) -> List[Token]:
+        token_specification = Tokenizer._get_token_specification()
+        token_mapping = Tokenizer._get_token_mapping()
+
+        regex_parts = '|'.join(
+            f'(?P<{pair[0].value}>{pair[1]})' for pair in token_specification
+        )
+
+        tokens = []
+
+        for match in re.finditer(regex_parts, self.rule):
+            type_ = match.lastgroup
+            value = match.group(type_)
+
+            if type_ == TokenType.WHITESPACE.value:
+                continue
+
+            if type_ == TokenType.ERROR.value:
+                raise RuntimeError(f'Unexpected character {value}')
+
+            if type_ in token_mapping:
+                tokens.append(token_mapping[type_](value))
+
+        return tokens

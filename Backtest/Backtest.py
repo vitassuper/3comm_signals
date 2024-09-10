@@ -3,11 +3,10 @@ from typing import List
 
 import pandas as pd
 from ccxt import Exchange
-from pandas import Series, Timedelta
+from pandas import Series
 
 from Backtest.DataManager import DataManager
 from Backtest.Deal import Deal
-from Data.Candles import Candles
 from Strategy.Strategy import Strategy
 from Utils.Timestamp import Timestamp
 
@@ -173,24 +172,6 @@ class Backtest:
                     self.manage_open_short_deals(row, timestamp)
 
             self._print_stats()
-
-    def check_missing_data(self, df1m: Candles) -> None:
-        expected_interval = Timedelta(
-            minutes=-1
-        )  # Adjust as per your candles frequency
-
-        # Iterate through the DataFrame and check for missing candles
-        for i in range(1, len(df1m)):
-            current_candle_time = df1m.index[i]
-            previous_candle_time = df1m.index[i - 1]
-
-            # Calculate the difference between the current and previous timestamps
-            time_diff = current_candle_time - previous_candle_time
-
-            if time_diff != expected_interval:
-                print(
-                    f'Missing candle between {previous_candle_time} and {current_candle_time}.'
-                )
 
     def _print_stats(self) -> None:
         if self.opened_long_deals:

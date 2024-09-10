@@ -66,14 +66,14 @@ class Parser:
 
         if isinstance(token, IdentifierToken):
             return Variable(token.value)
-        elif isinstance(token, NumberToken):
+        if isinstance(token, NumberToken):
             return Literal(token.value)
-        elif token.type == TokenType.LPAREN:
+        if token.type == TokenType.LPAREN:
             expr = self.parse()
             self.consume()
             return expr
-        else:
-            raise ValueError('Unexpected token')
+
+        raise ValueError('Unexpected token')
 
     def consume(self) -> Token:
         if self.current_token:

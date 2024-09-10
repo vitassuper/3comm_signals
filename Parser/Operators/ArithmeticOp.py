@@ -11,11 +11,11 @@ class ArithmeticOp(BinaryOp):
 
         if self.op == ArithmeticOpType.PLUS:
             return left_value + right_value
-        elif self.op == ArithmeticOpType.MINUS:
+        if self.op == ArithmeticOpType.MINUS:
             return left_value - right_value
-        elif self.op == ArithmeticOpType.DIV:
+        if self.op == ArithmeticOpType.DIV:
             return left_value / right_value
-        elif self.op == ArithmeticOpType.MUL:
+        if self.op == ArithmeticOpType.MUL:
             return left_value * right_value
-        else:
-            raise ValueError(f'Unknown operator: {self.op}')
+
+        raise ValueError(f'Unknown operator: {self.op}')

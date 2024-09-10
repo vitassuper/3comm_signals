@@ -10,11 +10,11 @@ class ComparisonOp(BinaryOp):
         right_value = self.right.evaluate(context)
         if self.op == ComparisonOpType.LESS_THAN:
             return left_value < right_value
-        elif self.op == ComparisonOpType.GREATER_THAN:
+        if self.op == ComparisonOpType.GREATER_THAN:
             return left_value > right_value
-        elif self.op == ComparisonOpType.LESS_THAN_OR_EQUAL:
+        if self.op == ComparisonOpType.LESS_THAN_OR_EQUAL:
             return left_value <= right_value
-        elif self.op == ComparisonOpType.GREATER_THAN_OR_EQUAL:
+        if self.op == ComparisonOpType.GREATER_THAN_OR_EQUAL:
             return left_value >= right_value
-        else:
-            raise ValueError(f'Unknown operator: {self.op}')
+
+        raise ValueError(f'Unknown operator: {self.op}')

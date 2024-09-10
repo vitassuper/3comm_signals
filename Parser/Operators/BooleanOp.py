@@ -10,7 +10,7 @@ class BooleanOp(BinaryOp):
         right_value = self.right.evaluate(context)
         if self.op == LogicalOpType.AND:
             return left_value and right_value
-        elif self.op == LogicalOpType.OR:
+        if self.op == LogicalOpType.OR:
             return left_value or right_value
-        else:
-            raise ValueError(f'Unknown operator: {self.op}')
+
+        raise ValueError(f'Unknown operator: {self.op}')
