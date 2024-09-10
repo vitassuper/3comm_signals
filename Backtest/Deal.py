@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
 
 from pandas import Timestamp
 

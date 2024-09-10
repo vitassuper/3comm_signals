@@ -11,5 +11,5 @@ class ConditionEvaluator:
         tokens = Tokenizer(self.condition).tokenize()
         self.ast = Parser(tokens).parse()
 
-    def evaluate(self, context: Dict[str, Union[int, str, float]]):
+    def evaluate(self, context: Dict[str, Union[int, str, float]]) -> bool:
         return self.ast.evaluate(context)

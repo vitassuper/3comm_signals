@@ -1,7 +1,7 @@
 {
   "pairs": [
     {
-      "symbol": "ADA/USDT"
+      "symbol": "SOL/USDT"
     }
   ],
   "indicators": [
@@ -23,14 +23,20 @@
       }
     },
     {
-      "name": "candlesticks",
+      "name": "candles",
       "timeframe": "1min"
     }
   ],
+  "short": {
+    "conditions": {
+       "entry": "candles.open > bbands.lower and candles.close < bbands.lower and bbands.middle < ema",
+       "exit": "candles.low <= entry_price - entry_price * 0.01"
+    }
+  },
   "long": {
      "conditions": {
-       "entry": "candlesticks.open < bbands.upper and candlesticks.close > bbands.upper and bbands.middle > ema",
-       "exit": "candlesticks.high >= entry_price + entry_price * 0.01"
+       "entry": "candles.open < bbands.upper and candles.close > bbands.upper and bbands.middle > ema",
+       "exit": "candles.high >= entry_price + entry_price * 0.01"
      }
   }
 }

@@ -4,7 +4,7 @@ from typing import Any, Dict
 from pandas import to_timedelta
 from pandas_ta import bbands
 
-from Candlestics import Candlesticks
+from Data import Candles
 from Strategy.Indicators.Indicator import Indicator
 
 
@@ -14,11 +14,11 @@ class BbandsIndicator(Indicator):
     ma_type: str
     std_dev: float
 
-    def calculate(self, candlesticks: Candlesticks, precision: int) -> None:
-        candlesticks = candlesticks.recalculate_to_new_timeframe(self.timeframe)
+    def calculate(self, candles: Candles, precision: int) -> None:
+        candles = candles.recalculate_to_new_timeframe(self.timeframe)
 
         bbands_df = bbands(
-            candlesticks['close'],
+            candles['close'],
             length=self.length,
             mamode=self.ma_type,
             std=self.std_dev,

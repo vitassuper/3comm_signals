@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from pandas import DataFrame, Series, Timedelta
 
-from Candlestics import Candlesticks
+from Data.Candles import Candles
 from Strategy.Serializable import Serializable
 
 
@@ -13,7 +13,7 @@ class Indicator(Serializable):
     values: DataFrame | Series | None = field(default=None, init=False)
 
     @abstractmethod
-    def calculate(self, candlesticks: Candlesticks, precision: int) -> None:
+    def calculate(self, candles: Candles, precision: int) -> None:
         pass
 
     @abstractmethod

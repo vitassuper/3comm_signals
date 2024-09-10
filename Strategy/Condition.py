@@ -11,7 +11,7 @@ class Condition(Serializable):
     exit: ConditionEvaluator | None = None
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]):
+    def from_dict(data: Dict[str, Any]) -> 'Condition':
         return Condition(
             entry=ConditionEvaluator(data['entry']),
             exit=ConditionEvaluator(data['exit'])

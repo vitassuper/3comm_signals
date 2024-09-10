@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from typing import List
 
 from pandas import Timedelta
@@ -17,3 +18,12 @@ def count_decimal_places(num: float) -> int:
 
 def find_smallest_timeframe(timeframes: List[Timedelta]) -> Timedelta:
     return min(timeframes)
+
+
+def get_start_of_minute_one_minute_ago() -> int:
+    now = datetime.now()
+
+    start_of_current_minute = now.replace(second=0, microsecond=0)
+    start_of_one_minute_ago = start_of_current_minute - timedelta(minutes=1)
+
+    return int(start_of_one_minute_ago.timestamp() * 1000)

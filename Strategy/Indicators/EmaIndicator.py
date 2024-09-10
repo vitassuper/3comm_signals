@@ -4,7 +4,7 @@ from typing import Any, Dict
 from pandas import to_timedelta
 from pandas_ta import ema
 
-from Candlestics import Candlesticks
+from Data.Candles import Candles
 from Strategy.Indicators.Indicator import Indicator
 
 
@@ -13,11 +13,11 @@ class EmaIndicator(Indicator):
     length: int
     offset: int
 
-    def calculate(self, candlesticks: Candlesticks, precision: int) -> None:
-        candlesticks = candlesticks.recalculate_to_new_timeframe(self.timeframe)
+    def calculate(self, candles: Candles, precision: int) -> None:
+        candles = candles.recalculate_to_new_timeframe(self.timeframe)
 
         ema_series = ema(
-            candlesticks['close'], length=self.length, offset=self.offset
+            candles['close'], length=self.length, offset=self.offset
         ).round(precision)
 
         ema_series.name = self.get_name()

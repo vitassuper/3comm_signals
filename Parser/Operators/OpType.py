@@ -1,7 +1,7 @@
 from enum import Enum
 
-from Enum.EnumMeta import EnumMeta
+from Utils.StrEnumMeta import StrEnumMeta
 
 
-class OpType(str, Enum, metaclass=EnumMeta):
+class OpType(str, Enum, metaclass=StrEnumMeta):
     pass

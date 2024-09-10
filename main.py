@@ -1,16 +1,14 @@
 import json
 
 import ccxt
+from ccxt import Exchange
 from pandas import set_option
 
 from Backtest.Backtest import Backtest
-from Parser.Parser import Parser
-from Parser.Tokenizer import Tokenizer
-from Parser.visualize_ast import visualize_ast
 from Strategy.Strategy import Strategy
 
 
-def get_binance_exchange():
+def get_binance_exchange() -> Exchange:
     return ccxt.binance({'enableRateLimit': True})
 
 

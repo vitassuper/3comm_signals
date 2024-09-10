@@ -1,7 +1,7 @@
 from pandas import DataFrame, Timedelta, to_datetime
 
 
-class Candlesticks(DataFrame):
+class Candles(DataFrame):
     def __init__(self, *args, **kwargs) -> None:
         # Initialize the DataFrame
         super().__init__(*args, **kwargs)
@@ -11,9 +11,7 @@ class Candlesticks(DataFrame):
             self['time'] = to_datetime(self['time'], unit='ms')
             self.set_index('time', inplace=True)
 
-    def recalculate_to_new_timeframe(
-        self, timeframe: Timedelta
-    ) -> 'Candlesticks':
+    def recalculate_to_new_timeframe(self, timeframe: Timedelta) -> 'Candles':
         df = self.copy()
 
         return df.resample(timeframe).apply(

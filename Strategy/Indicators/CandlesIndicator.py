@@ -2,17 +2,17 @@ from typing import Any, Dict
 
 from pandas import to_timedelta
 
-from Candlestics import Candlesticks
+from Data import Candles
 from Strategy.Indicators.Indicator import Indicator
 
 
-class CandlesticksIndicator(Indicator):
-    def calculate(self, candlesticks: Candlesticks, precision: int) -> None:
-        candlesticks = candlesticks.recalculate_to_new_timeframe(self.timeframe)
+class CandlesIndicator(Indicator):
+    def calculate(self, candles: Candles, precision: int) -> None:
+        candles = candles.recalculate_to_new_timeframe(self.timeframe)
 
         indicator_name = self.get_name()
 
-        candlesticks.columns = [
+        candles.columns = [
             f'{indicator_name}.open',
             f'{indicator_name}.high',
             f'{indicator_name}.low',
@@ -20,13 +20,13 @@ class CandlesticksIndicator(Indicator):
             f'{indicator_name}.volume',
         ]
 
-        self.values = candlesticks
+        self.values = candles
 
     def get_name(self) -> str:
-        return 'candlesticks'
+        return 'candles'
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'CandlesticksIndicator':
-        return CandlesticksIndicator(
+    def from_dict(data: Dict[str, Any]) -> 'CandlesIndicator':
+        return CandlesIndicator(
             timeframe=to_timedelta(data['timeframe']),
         )
