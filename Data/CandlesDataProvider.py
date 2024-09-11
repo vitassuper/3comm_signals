@@ -21,12 +21,15 @@ class CandlesDataProvider:
         start_timestamp: Timestamp,
         end_timestamp: Timestamp,
     ) -> None:
+        # TODO: fix it
+        start_timestamp = start_timestamp.timestamp_ms
+
         while start_timestamp <= end_timestamp:
             ohlcv = self.exchange.fetch_ohlcv(
                 symbol,
                 '1m',
                 limit=self.EXCHANGE_LIMIT,
-                since=start_timestamp.timestamp_ms,
+                since=start_timestamp,
             )
 
             if len(ohlcv):

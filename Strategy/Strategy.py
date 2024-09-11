@@ -48,7 +48,7 @@ class Strategy(Serializable):
         for indicator in self.indicators:
             if hasattr(indicator, 'length'):
                 length = indicator.length
-                minutes = indicator.timeframe.total_seconds() / 60
+                minutes = int(indicator.timeframe.total_seconds() / 60)
 
                 # -2 because pagination in Backtest
                 local_period = (length - 2) * minutes

@@ -26,13 +26,15 @@ class CandlesDataManager:
         )
 
     def fetch_candles_if_missing(
-        self, symbol: str, start_timestamp: Timestamp
+        self,
+        symbol: str,
+        start_timestamp: Timestamp,
+        end_timestamp: Optional[Timestamp] = None,
     ) -> None:
         first_candle, last_candle = fetch_first_and_last_candles(symbol)
 
-        one_minute_ago_timestamp = Timestamp(
-            get_start_of_minute_one_minute_ago()
-        )
+        if end_timestamp is None:
+            end_timestamp = Timestamp(get_start_of_minute_one_minute_ago())
 
         if first_candle or last_candle:
             first_candle_timestamp = Timestamp(first_candle['opened_at'])
@@ -45,17 +47,17 @@ class CandlesDataManager:
                     first_candle_timestamp.sub_minutes(1),
                 )
 
-            if last_candle_timestamp < one_minute_ago_timestamp:
+            if last_candle_timestamp < end_timestamp:
                 self.data_provider.fetch_and_store_historical_candles(
                     symbol,
                     last_candle_timestamp.add_minutes(1),
-                    one_minute_ago_timestamp,
+                    end_timestamp,
                 )
         else:
             self.data_provider.fetch_and_store_historical_candles(
                 symbol,
                 start_timestamp,
-                one_minute_ago_timestamp,
+                end_timestamp,
             )
 
     def get_candles_data(
@@ -73,7 +75,7 @@ class CandlesDataManager:
     @staticmethod
     def validate_data_completeness(candles: Candles) -> None:
         expected_interval = Timedelta(
-            minutes=-1
+            minutes=1
         )  # Adjust as per your candles frequency
 
         # Iterate through the DataFrame and check for missing candles
@@ -84,7 +86,6 @@ class CandlesDataManager:
             # Calculate the difference between the current and previous timestamps
 
             if current_candle_time - previous_candle_time != expected_interval:
-                # TODO: temp solution
-                print(
+                raise ValueError(
                     f'Missing candle between {previous_candle_time} and {current_candle_time}.'
                 )

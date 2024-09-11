@@ -1,11 +1,15 @@
 import json
+import time
+from datetime import datetime, timedelta
 
 import ccxt
 from ccxt import Exchange
 from pandas import set_option
 
 from Backtest.Backtest import Backtest
+from Process import Process
 from Strategy.Strategy import Strategy
+from Utils.Timestamp import Timestamp
 
 
 def get_binance_exchange() -> Exchange:
@@ -18,7 +22,9 @@ def main() -> None:
 
     with open('strategy.json', 'r') as file:
         strategy = Strategy.from_dict(json.load(file))
-        Backtest(strategy, get_binance_exchange()).run()
+        Process(strategy, get_binance_exchange()).loop()
+
+        # Backtest(strategy, get_binance_exchange()).run()
 
         # content = json.load(file)
         # tokens = Tokenizer(content['long']['conditions']['entry']).tokenize()
