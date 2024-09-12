@@ -14,7 +14,23 @@ class Candles(DataFrame):
     def recalculate_to_new_timeframe(self, timeframe: Timedelta) -> 'Candles':
         df = self.copy()
 
-        return df.resample(timeframe).apply(
+        if timeframe == Timedelta(minutes=1):
+            return df
+
+        # Determine the expected start time for the first full timeframe
+        first_valid_time = df.index[0] + (timeframe - (df.index[0] - df.index[0].floor(timeframe)))
+
+        # Determine the expected start time for the last full timeframe
+        last_valid_time = df.index[-1].floor(timeframe)
+
+        if (df.index[-1] - last_valid_time) < timeframe:
+            df_filtered = df[df.index < last_valid_time]
+        else:
+            df_filtered = df
+
+        df_filtered = df_filtered[df_filtered.index >= first_valid_time]
+
+        return df_filtered.resample(timeframe).apply(
             {
                 'open': 'first',
                 'high': 'max',

@@ -45,22 +45,7 @@ class Process:
             # Wait until the start of the next minute
             time.sleep(initial_wait_time)
 
-            # Measure the time taken to execute the function
-            start_time = time.time()
-
             self.process()
-
-            end_time = time.time()
-
-            # Calculate how much time was spent processing
-            processing_time = end_time - start_time
-
-            # Calculate the remaining time to wait before the next call
-            remaining_wait_time = 60 - processing_time
-
-            # Ensure we wait the correct amount of time
-            if remaining_wait_time > 0:
-                time.sleep(remaining_wait_time)
 
     def process(self):
         symbol = 'ADA/USDT'
@@ -113,6 +98,15 @@ class Process:
             print(
                 f'Open long deal: '
                 f'time {last_row.name} - '
+                f'open: {last_row["candles.open"]} - '
+                f'close: {last_row["candles.close"]} - '
+                f'b.upper: {last_row["bbands.upper"]} - '
+                f'ema: {last_row["ema"]} - '
+                f'b.middle: {last_row["bbands.middle"]}'
+            )
+        else:
+            print(
+                f'Time {last_row.name} - '
                 f'open: {last_row["candles.open"]} - '
                 f'close: {last_row["candles.close"]} - '
                 f'b.upper: {last_row["bbands.upper"]} - '
